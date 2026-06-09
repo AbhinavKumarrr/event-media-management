@@ -214,7 +214,7 @@ EventLens/
 ├── package-lock.json
 ├── server.js (if backend is used)
 └── .env (not committed)
-```t
+```
 ---
 
 Author
