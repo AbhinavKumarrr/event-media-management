@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6366f1" />
+  <meta name="description" content="Event & Media Management Platform — albums, cloud uploads, stories, analytics & more." />
+  <title>EventLens — Event & Media Platform</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📸</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Auth View -->
+  <div id="authView" class="auth-view">
+    <div class="auth-hero">
+      <div class="brand-mark">
+        <span class="brand-icon">📸</span>
+        <span class="brand-name">EventLens</span>
+      </div>
+      <h1>Capture, share &amp; relive every moment</h1>
+      <p>
+        A modern event media hub with cloud-powered uploads, smart discovery, collaborative albums,
+        and real-time analytics — built for clubs, photographers, and campus events.
+      </p>
+      <div class="auth-features">
+        <span>☁️ AWS S3 Cloud</span>
+        <span>∞ Infinite Gallery</span>
+        <span>📱 QR Sharing</span>
+        <span>✨ AI Captions</span>
+        <span>📊 Analytics</span>
+        <span>📴 Offline PWA</span>
+        <span>🔍 Duplicate Detection</span>
+        <span>🎬 Stories</span>
+      </div>
+      <div class="auth-stats-row">
+        <div class="auth-stat"><strong>10K+</strong><span>Photos hosted</span></div>
+        <div class="auth-stat"><strong>99.9%</strong><span>Cloud uptime</span></div>
+        <div class="auth-stat"><strong>Secure</strong><span>S3 presigned URLs</span></div>
+      </div>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button id="loginTabBtn" class="tab active" type="button">Login</button>
+        <button id="registerTabBtn" class="tab" type="button">Register</button>
+      </div>
+      <p id="authMessage" class="auth-message"></p>
+
+      <form id="loginForm" class="auth-form">
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" placeholder="you@university.edu" autocomplete="email" />
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" placeholder="Enter password" autocomplete="current-password" />
+        <button type="submit" class="primary-btn">Sign In</button>
+      </form>
+
+      <form id="registerForm" class="auth-form hidden">
+        <label for="registerName">Name</label>
+        <input id="registerName" type="text" placeholder="Your name" autocomplete="name" />
+        <label for="registerEmail">Email</label>
+        <input id="registerEmail" type="email" placeholder="you@university.edu" autocomplete="email" />
+        <label for="registerPassword">Password</label>
+        <input id="registerPassword" type="password" placeholder="Create password" autocomplete="new-password" />
+        <label for="registerRole">Role</label>
+        <select id="registerRole">
+          <option>Viewer</option>
+          <option>Club Member</option>
+          <option>Photographer</option>
+          <option>Admin</option>
+        </select>
+        <button type="submit" class="primary-btn">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- App View -->
+  <div id="appView" class="app-view hidden">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="brand-mark compact">
+          <span class="brand-icon">📸</span>
+          <span class="brand-name">EventLens</span>
+        </div>
+        <p id="welcomeText" class="welcome-text">Welcome back</p>
+      </div>
+      <div class="topbar-right">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input id="searchInput" class="search" type="search" placeholder="Search events, tags, captions..." />
+        </div>
+        <span id="cloudStatus" class="cloud-badge online" title="Cloud connection status">☁️ S3 Online</span>
+        <button id="installPwaBtn" class="ghost-btn hidden" type="button">Install App</button>
+        <div id="userBadge" class="user-badge"></div>
+        <button id="logoutBtn" class="secondary-btn" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+      <div class="stat-card accent-indigo">
+        <div class="stat-icon">📅</div>
+        <div id="eventCount" class="stat-value">0</div>
+        <div class="stat-label">Events</div>
+      </div>
+      <div class="stat-card accent-violet">
+        <div class="stat-icon">🖼️</div>
+        <div id="mediaCount" class="stat-value">0</div>
+        <div class="stat-label">Media</div>
+      </div>
+      <div class="stat-card accent-emerald">
+        <div class="stat-icon">🌐</div>
+        <div id="publicCount" class="stat-value">0</div>
+        <div class="stat-label">Public</div>
+      </div>
+      <div class="stat-card accent-amber">
+        <div class="stat-icon">🔒</div>
+        <div id="privateCount" class="stat-value">0</div>
+        <div class="stat-label">Private</div>
+      </div>
+      <div class="stat-card accent-rose">
+        <div class="stat-icon">♥</div>
+        <div id="likeCount" class="stat-value">0</div>
+        <div class="stat-label">Likes</div>
+      </div>
+      <div class="stat-card accent-cyan">
+        <div class="stat-icon">★</div>
+        <div id="favCount" class="stat-value">0</div>
+        <div class="stat-label">Favourites</div>
+      </div>
+    </section>
+
+    <!-- Stories / Highlights -->
+    <section class="stories-section panel">
+      <div class="panel-head">
+        <h3>🎬 Stories &amp; Highlights</h3>
+        <span class="panel-sub">Recent uploads from the last 7 days</span>
+      </div>
+      <div id="storiesStrip" class="stories-strip"></div>
+    </section>
+
+    <section class="layout">
+      <aside class="sidebar">
+        <div id="createEventSection" class="panel">
+          <div class="panel-head">
+            <h3>Create Event</h3>
+          </div>
+          <div class="form-stack">
+            <input id="eventName" type="text" placeholder="Event name" />
+            <input id="eventDate" type="date" />
+            <input id="eventCategory" type="text" placeholder="Category" />
+            <input id="eventClub" type="text" placeholder="Club name" />
+            <textarea id="eventDesc" rows="3" placeholder="Event description"></textarea>
+            <select id="eventVisibility">
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+            <button id="addEventBtn" class="primary-btn" type="button">Create Event</button>
+          </div>
+        </div>
+
+        <div id="uploadSection" class="panel">
+          <div class="panel-head">
+            <h3>Upload Media</h3>
+            <span class="panel-sub">Direct to AWS S3</span>
+          </div>
+          <div id="dropzone" class="dropzone" role="button" tabindex="0">
+            <div class="drop-icon">☁️</div>
+            <div class="drop-title">Drag &amp; Drop</div>
+            <small>Photos &amp; videos — duplicate detection enabled</small>
+            <input id="fileInput" type="file" accept="image/*,video/*" multiple hidden />
+          </div>
+          <div class="form-stack" style="margin-top:14px;">
+            <label class="mini-label" for="uploadEventSelect">Upload to event</label>
+            <select id="uploadEventSelect"></select>
+            <label class="mini-label" for="referenceInput">Personalized discovery</label>
+            <input id="referenceInput" type="text" placeholder="Name or tag to match" />
+            <div class="mini-box">
+              Matching media: <strong id="matchCount">0</strong>
+            </div>
+          </div>
+          <div id="previewArea" class="preview-area"></div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Event Albums</h3>
+            <div class="panel-actions">
+              <button id="qrShareBtn" class="ghost-btn" type="button" title="Share album via QR">📱 QR Share</button>
+              <select id="sortSelect">
+                <option value="date">Sort by Date</option>
+                <option value="name">Sort by Name</option>
+                <option value="category">Sort by Category</option>
+              </select>
+            </div>
+          </div>
+          <div id="eventGrid" class="event-grid"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Media Gallery</h3>
+            <div class="panel-actions">
+              <span id="galleryCount" class="gallery-count">0 items</span>
+              <select id="eventFilterSelect"></select>
+            </div>
+          </div>
+          <div id="mediaGrid" class="media-grid masonry"></div>
+          <div id="scrollSentinel" class="scroll-sentinel">
+            <span class="loader-dot"></span>
+            <span>Loading more...</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Personalized Discovery</h3>
+          </div>
+          <div id="discoverGrid" class="discover-grid"></div>
+        </div>
+      </main>
+
+      <aside class="sidebar">
+        <div class="panel">
+          <div class="panel-head"><h3>Profile</h3></div>
+          <div id="profileCard" class="profile-card"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Analytics Dashboard</h3>
+          </div>
+          <div id="analyticsBox" class="analytics-box"></div>
+          <div id="analyticsChart" class="analytics-chart"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>Notifications</h3></div>
+          <div id="notificationArea" class="notification-list"></div>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <!-- QR Share Modal -->
+  <div id="qrModal" class="modal hidden" role="dialog" aria-labelledby="qrModalTitle">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-card">
+      <button class="modal-close" type="button" data-close-modal aria-label="Close">&times;</button>
+      <h3 id="qrModalTitle">📱 Share Album via QR</h3>
+      <p class="modal-desc">Scan this code to open the selected event album instantly.</p>
+      <div id="qrCodeBox" class="qr-box"></div>
+      <p id="qrShareUrl" class="qr-url"></p>
+      <div class="modal-actions">
+        <button id="copyShareLinkBtn" class="primary-btn" type="button">Copy Link</button>
+        <button class="secondary-btn" type="button" data-close-modal>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story Viewer Modal -->
+  <div id="storyModal" class="modal hidden" role="dialog">
+    <div class="modal-backdrop" data-close-story></div>
+    <div class="modal-card story-viewer">
+      <button class="modal-close" type="button" data-close-story aria-label="Close">&times;</button>
+      <div id="storyContent" class="story-content"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
