@@ -203,6 +203,7 @@ For a production-ready version, the following schema is recommended:
 ```
 ---
 
+```text
 EventLens/
 ├── index.html
 ├── style.css
@@ -213,7 +214,7 @@ EventLens/
 ├── package-lock.json
 ├── server.js (if backend is used)
 └── .env (not committed)
-
+```t
 ---
 
 Author
